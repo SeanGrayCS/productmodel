@@ -1,0 +1,49 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch GenTestInput",
+      "request": "launch",
+      "mainClass": "com.seangraycs.GenTestInput",
+      "projectName": "productmodel"
+    },
+    {
+      "type": "java",
+      "name": "Launch TestDel",
+      "request": "launch",
+      "mainClass": "com.seangraycs.TestDel",
+      "projectName": "productmodel"
+    },
+    {
+      "type": "java",
+      "name": "Launch CSVToPPCTD",
+      "request": "launch",
+      "mainClass": "com.seangraycs.CSVToPPCTD",
+      "projectName": "productmodel"
+    },
+    {
+      "type": "java",
+      "name": "Launch Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "Launch GenInput",
+      "request": "launch",
+      "mainClass": "com.seangraycs.GenInput",
+      "projectName": "productmodel"
+    },
+    {
+      "type": "java",
+      "name": "Launch ModelGenerator",
+      "request": "launch",
+      "mainClass": "com.seangraycs.ModelGenerator",
+      "projectName": "productmodel"
+    }
+  ]
+}
