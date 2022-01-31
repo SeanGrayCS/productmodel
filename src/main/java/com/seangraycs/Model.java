@@ -6,6 +6,8 @@ import java.util.Arrays;
 import org.ejml.simple.SimpleMatrix;
 
 public class Model implements Serializable {
+  private static final long serialVersionUID = 0L;
+
   private int n, m;
   private String[] products;
   private double[][] points;
@@ -15,6 +17,7 @@ public class Model implements Serializable {
   private boolean trained;
 
   private SimpleMatrix[] thetas;
+  private double fitness;
 
   public Model(String[] products, double[][] points, int numFolds) {
     this.products = products;
@@ -27,6 +30,7 @@ public class Model implements Serializable {
 
     this.numFolds = numFolds;
     thetas = new SimpleMatrix[m];
+    fitness = -1;
   }
 
   private void updateMaxs(double[][] data) {
@@ -48,6 +52,10 @@ public class Model implements Serializable {
     return thetas;
   }
 
+  public double getFitness() {
+    return fitness;
+  }
+
   public void addPoints(double[][] data) {
     if (data[0].length != m) {
       return;
@@ -63,13 +71,16 @@ public class Model implements Serializable {
     trained = false;
   }
 
+  public void setFitness(double fitness) {
+    this.fitness = fitness;
+  }
+
   public double test(double[][] testData) {
     return test(testData, -1);
   }
 
   public double test(double[][] testData, int idx) {
     if (!trained) {
-      System.out.println("Not trained");
       train();
     }
     if (idx == -1) {
@@ -83,22 +94,18 @@ public class Model implements Serializable {
     for (int i = 0; i < testData.length; i++) {
       double score = test(Theta, testData[i], idx);
       fitness += (score / testData.length);
-      // System.out.println(i + " " + score + " " + fitness);
     }
 
     fitness = Math.sqrt(fitness);
-    System.out.println("Fitness: " + fitness);
+    // System.out.println("Fitness: " + fitness);
     return fitness;
   }
 
   public double test(double[] testData) {
-    // System.out.println("Testing " + Arrays.toString(testData) + "...");
-
     double score = 0.0;
     for (int i = 0; i < m; i++) {
       score += (test(thetas[i], testData, i) / m);
     }
-    // System.out.println("RMSE: " + Math.sqrt(score) + "\n");
     return score;
   }
 
@@ -107,10 +114,7 @@ public class Model implements Serializable {
       return test(testData);
     }
 
-    // System.out.println("\tTesting " + Arrays.toString(testData) + " for " +
-    // products[idx] + "...");
     double pred = predict(Theta, getX(testData, idx), idx);
-    // System.out.println("\t" + pred);
     return Math.pow(pred - testData[idx], 2);
   }
 
@@ -137,7 +141,7 @@ public class Model implements Serializable {
 
   public void train() {
     for (int i = 0; i < m; i++) {
-      System.out.println("\nTraining to predict " + products[i] + "...");
+      // System.out.println("\nTraining to predict " + products[i] + "...");
       trainValue(i);
     }
     trained = true;
@@ -238,5 +242,14 @@ public class Model implements Serializable {
   // private SimpleMatrix getY(int idx) {
   // return getY(idx, points);
   // }
+
+  @Override
+  public String toString() {
+    String s = String.format("Fitness: %12.5e", fitness);
+    String format = "||  %-12s".repeat(products.length);
+    String prods = String.format(format, (Object[]) products);
+    s += "\n" + prods + "\n";
+    return s;
+  }
 
 }

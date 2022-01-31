@@ -11,6 +11,7 @@ import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.colormaps.ColorMapHotCold;
+import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
@@ -44,7 +45,11 @@ public class Graph3D {
   private final ColorMapper colorMapper;
 
   public Graph3D(Model model, String title) {
-    colorMap = new ColorMapAlpha(new ColorMapHotCold(), 0.75f);
+    this(model, title, new ColorMapHotCold());
+  }
+
+  public Graph3D(Model model, String title, IColorMap baseColorMap) {
+    colorMap = new ColorMapAlpha(baseColorMap, 0.75f);
     
     this.model = model;
     this.title = title;

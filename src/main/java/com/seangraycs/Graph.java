@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 
+/**
+ * Graph is deprecated. Use Graph3D instead.
+ */
 public class Graph extends Canvas {
 
   private double[][] points;

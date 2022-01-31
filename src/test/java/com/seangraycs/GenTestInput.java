@@ -1,5 +1,6 @@
 package com.seangraycs;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -24,7 +25,7 @@ public class GenTestInput {
       m = 100;
       numAngles = (i == (maxDims - 1)) ? 181 : 46;
 
-      String file = "./dat/products" + i + ".ppctd";
+      String file = "./dat/products" + i;// + ".ppctd";
 
       dataList = new ArrayList<>(Arrays.asList(new double[n]));
       if (i / (maxDims - 1) == 0) {
@@ -38,12 +39,42 @@ public class GenTestInput {
 
       PPCTrainingData dataOut = new PPCTrainingData(prodArr, dataList);
 
-      FileOutputStream fos = new FileOutputStream(file);
+      File f = new File(file + ".ppctd");
+      if (f.exists()) {
+        f.delete();
+      }
+
+      FileOutputStream fos = new FileOutputStream(file + ".ppctd");
       ObjectOutputStream oos = new ObjectOutputStream(fos);
 
       oos.writeObject(dataOut);
       oos.close();
       fos.close();
+
+      // Also write test data to CSV for demo of CSV to PPCTD conversion
+      java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(file + ".csv"));
+      writer.write(dataList.size() + ", " + prodArr.length + "\n");
+
+      for (int j = 0; j < prodArr.length; j++) {
+        writer.write(prodArr[j]);
+        if (j == prodArr.length - 1) {
+          writer.write("\n");
+          break;
+        }
+        writer.write(", ");
+      }
+
+      for (int j = 0; j < dataList.size(); j++) {
+        double[] point = dataList.get(j);
+        for (int k = 0; k < point.length; k++) {
+          writer.write("" + point[k]);
+          if (k != point.length - 1) {
+            writer.write(", ");
+          }
+        }
+        writer.write("\n");
+      }
+      writer.close();
     }
 
   }
@@ -74,9 +105,9 @@ public class GenTestInput {
     }
   }
 
-  // CHANGE NEEDED: SHOULD GENERATE POINTS ON THE POSITIVE SECTION
+  // Generate points on the positive section
   // (for all angles phi(0) to phi(n-1), 0 <= phi(i) <= pi/2)
-  // OF AN N-DIMENSIONAL SPHERE WITH r = m
+  // of an n-dimensional sphere with radius m
   // (output points should be in cartesian coordinates)
   private static void genSphere() {
     double[] phi = new double[numAngles]; // In radians
@@ -123,47 +154,5 @@ public class GenTestInput {
       }
       pastList = newList;
     }
-
-    // ArrayList<Integer> val0s = new ArrayList<>();
-    // for (int i = 0; i < n; i++) {
-    // for (int j = dataList.size() - 1; j >= 0; j--) {
-    // int[] arr = dataList.remove(j);
-
-    // int sum = m;
-    // for (int k = 0; k < i; k++) {
-    // sum -= arr[k];
-    // }
-
-    // if (i == n - 1) {
-    // int[] res = Arrays.copyOf(arr, i + 1);
-    // int idx = val0s.size() - (j % val0s.size()) - 1;
-    // res[i] = val0s.get(idx);
-    // dataList.add(res);
-    // continue;
-    // }
-
-    // int inc = 0;
-    // while (inc * (inc + 1) <= m) {
-    // inc++;
-    // }
-    // inc--;
-    // int inc2 = 0;
-    // for (int k = 0; k <= sum; k += inc) {
-    // int[] res = Arrays.copyOf(arr, i + 1);
-    // res[i] = k;
-    // dataList.add(res);
-    // if (i == 0) {
-    // val0s.add(res[0]);
-    // }
-
-    // if (k == 0 || inc == 1) {
-    // continue;
-    // }
-
-    // inc -= inc2;
-    // inc2 ^= 1;
-    // }
-    // }
-    // }
   }
 }

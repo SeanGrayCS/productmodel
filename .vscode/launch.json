@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch ModelTest",
+      "request": "launch",
+      "mainClass": "com.seangraycs.ModelTest",
+      "projectName": "productmodel"
+    },
+    {
+      "type": "java",
+      "name": "Launch ModelDemo",
+      "request": "launch",
+      "mainClass": "com.seangraycs.ModelDemo",
+      "projectName": "productmodel"
+    },
+    {
+      "type": "java",
       "name": "Launch GenTestInput",
       "request": "launch",
       "mainClass": "com.seangraycs.GenTestInput",
