@@ -119,7 +119,11 @@ public class ModelBuilder implements RunnableListener {
   }
 
   public void graphModel(Model model, String title) {
-    Graph3D graph = new Graph3D(model, title);
+    graphModels(new Model[] {model}, title);
+  }
+
+  public void graphModels(Model[] models, String title) {
+    Graph3D graph = new Graph3D(models, title);
 
     if (asyncGraphing) {
       graphAsync(graph, title);

@@ -11,6 +11,7 @@ public class Model implements Serializable {
   private int n, m;
   private String[] products;
   private double[][] points;
+  private double[] mins;
   private double[] maxs;
 
   private int numFolds;
@@ -20,28 +21,51 @@ public class Model implements Serializable {
   private double fitness;
 
   public Model(String[] products, double[][] points, int numFolds) {
+    this(products, points, numFolds, new double[points[0].length], new double[points[0].length]);
+    updateMins(points);
+    updateMaxs(points);
+  }
+
+
+  public Model(String[] products, double[][] points, int numFolds, double[] mins, double[] maxs) {
     this.products = products;
     this.points = points;
     n = points.length;
     m = points[0].length;
 
-    maxs = new double[m];
-    updateMaxs(points);
+    this.mins = mins;
+    this.maxs = maxs;
 
     this.numFolds = numFolds;
     thetas = new SimpleMatrix[m];
     fitness = -1;
   }
 
+  private void updateMins(double[][] data) {
+    updateMinMaxs(data, mins, true);
+  }
+
   private void updateMaxs(double[][] data) {
+    updateMinMaxs(data, maxs, false);
+  }
+
+  private void updateMinMaxs(double[][] data, double[] arr, boolean min) {
     for (int i = 0; i < data.length; i++) {
       for (int j = 0; j < m; j++) {
         double val = data[i][j];
-        if (val > maxs[j]) {
-          maxs[j] = val;
+        if (min ^ (val > arr[j])) {
+          arr[j] = val;
         }
       }
     }
+  }
+
+  public double[] getMins() {
+    return mins;
+  }
+
+  public double[] getMaxs() {
+    return maxs;
   }
 
   public double[][] getPoints() {
@@ -61,6 +85,7 @@ public class Model implements Serializable {
       return;
     }
 
+    updateMins(data);
     updateMaxs(data);
     int len = data.length;
     n += len;
